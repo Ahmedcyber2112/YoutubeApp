@@ -13,5 +13,10 @@
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ]
+  ],
+  "functions": {
+    "src/**": {
+      "runtime": "@vercel/node@18"
+    }
+  }
 }

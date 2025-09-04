@@ -2,17 +2,47 @@ import React, { useState, useEffect } from "react";
 import { Stack, Box, Typography, LinearProgress } from "@mui/material";
 import { SideBar, Videos } from "../components/index";
 import { fetchFromAPI } from "../utils/fetchFromURL.js";
+
 const Feed = () => {
   const [selectedCategory, setSelectedCategory] = useState("New");
   const [videosData, setvideosData] = useState([]);
   const [loading, setloading] = useState(false);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     setloading(true);
-    fetchFromAPI(`search?part=snippet&q=${selectedCategory}`).then((data) => {
-      setvideosData(data.items);
-      setloading(false);
-    });
+    setError(null);
+    
+    fetchFromAPI(`search?part=snippet&q=${selectedCategory}`)
+      .then((data) => {
+        if (data && data.items) {
+          setvideosData(data.items);
+        } else {
+          setvideosData([]);
+        }
+        setloading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching data:", err);
+        setError("Failed to load videos");
+        setloading(false);
+        setvideosData([]);
+      });
   }, [selectedCategory]);
+
+  if (error) {
+    return (
+      <Box p={2} sx={{ color: "#fff", textAlign: "center" }}>
+        <Typography variant="h5" color="error">
+          {error}
+        </Typography>
+        <Typography variant="body1" mt={2}>
+          Please check your internet connection and try again.
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <>
       {loading && <LinearProgress color="error" />}

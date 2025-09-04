@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Stack, Box } from "@mui/material";
+import { Stack, Box, Typography } from "@mui/material";
 import VideoCart from "./VideoCart";
 import ChannelCart from "./ChannelCart";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -8,9 +8,16 @@ const Videos = ({ videosData, direction }) => {
   const [visiableVideos, setvisiableVideos] = useState([]);
   const [videsIndex, setvidesIndex] = useState(10);
   const [more, setmore] = useState(true);
+  
   useEffect(() => {
-    setvisiableVideos(videosData.slice(0, videsIndex));
-  }, [videosData]);
+    if (videosData && videosData.length > 0) {
+      setvisiableVideos(videosData.slice(0, videsIndex));
+      setmore(videosData.length > videsIndex);
+    } else {
+      setvisiableVideos([]);
+      setmore(false);
+    }
+  }, [videosData, videsIndex]);
 
   const fetchMoreData = () => {
     if (visiableVideos.length < videosData.length) {
@@ -25,6 +32,20 @@ const Videos = ({ videosData, direction }) => {
       setmore(false);
     }
   };
+
+  // If no videos data, show a message
+  if (!videosData || videosData.length === 0) {
+    return (
+      <Box sx={{ textAlign: "center", color: "#fff", mt: 4 }}>
+        <Typography variant="h6">
+          No videos available at the moment.
+        </Typography>
+        <Typography variant="body2" sx={{ mt: 1, opacity: 0.7 }}>
+          Please try again later or select a different category.
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <InfiniteScroll
@@ -51,17 +72,23 @@ const Videos = ({ videosData, direction }) => {
           alignItems: "center",
         }}
       >
-        {visiableVideos?.map((item) =>
-          item.id.channelId ? (
-            <ChannelCart channelDetails={item} key={item.id.channelId} />
+        {visiableVideos?.map((item, index) => {
+          // Add safety checks for item structure
+          if (!item || !item.id) return null;
+          
+          return item.id.channelId ? (
+            <ChannelCart 
+              channelDetails={item} 
+              key={item.id.channelId || `channel-${index}`} 
+            />
           ) : (
             <VideoCart
               video={item}
-              key={item.id.videoId}
+              key={item.id.videoId || `video-${index}`}
               setvidesIndex={setvidesIndex}
             />
-          )
-        )}
+          );
+        })}
       </Stack>
     </InfiniteScroll>
   );
