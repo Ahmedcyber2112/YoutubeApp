@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchFromAPI } from "../utils/fetchFromURL.JS";
+import { fetchFromAPI } from "../utils/fetchFromURL.js";
 import { useParams } from "react-router-dom";
 import {
   Box,

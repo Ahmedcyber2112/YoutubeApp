@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Stack, Box, Typography, LinearProgress } from "@mui/material";
 import { SideBar, Videos } from "../components/index";
-import { fetchFromAPI } from "../utils/fetchFromURL.JS";
+import { fetchFromAPI } from "../utils/fetchFromURL.js";
 import { useParams } from "react-router-dom";
 const SearchFeed = () => {
   const { searchTerm } = useParams();

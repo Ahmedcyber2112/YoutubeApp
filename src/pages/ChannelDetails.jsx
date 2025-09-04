@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchFromAPI } from "../utils/fetchFromURL.JS";
+import { fetchFromAPI } from "../utils/fetchFromURL.js";
 import { useParams } from "react-router-dom";
 import { Videos } from "../components/index";
 import { Box, LinearProgress } from "@mui/material";
