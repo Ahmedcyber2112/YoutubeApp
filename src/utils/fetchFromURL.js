@@ -11,10 +11,18 @@ const options = {
 
 export const fetchFromAPI = async (url) => {
   try {
+    console.log("Fetching from:", BASIC_URL + "/" + url);
     const { data } = await axios(BASIC_URL + "/" + url, options);
+    console.log("API Response:", data);
     return data;
   } catch (error) {
     console.error("API Error:", error);
+    console.error("Error details:", {
+      message: error.message,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data
+    });
     // Return empty data structure to prevent app crash
     return { items: [] };
   }
